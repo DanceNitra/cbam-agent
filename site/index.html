@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBAM Comply — Automated EU Carbon Border Adjustment Mechanism Reporting</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0a0a0f; color: #e0e0e0; line-height: 1.6; }
+    
+    /* Gradient background */
+    .bg-glow { position: fixed; top: -50%; left: -20%; width: 140%; height: 140%; background: radial-gradient(ellipse at 30% 20%, rgba(233,69,96,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(26,26,46,0.5) 0%, transparent 50%); z-index: -1; }
+    
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Nav */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .logo { font-weight: 700; font-size: 22px; color: #fff; }
+    .logo span { color: #e94560; }
+    nav a { color: #888; text-decoration: none; font-size: 14px; margin-left: 32px; transition: color 0.2s; }
+    nav a:hover { color: #fff; }
+    .nav-cta { background: #e94560; color: #fff !important; padding: 8px 20px; border-radius: 6px; font-weight: 500; }
+    .nav-cta:hover { background: #c23152; }
+    
+    /* Hero */
+    .hero { padding: 80px 0 60px; text-align: center; }
+    .hero-badge { display: inline-block; background: rgba(233,69,96,0.15); color: #e94560; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; letter-spacing: 0.3px; margin-bottom: 20px; border: 1px solid rgba(233,69,96,0.3); }
+    .hero h1 { font-size: 48px; font-weight: 800; color: #fff; margin-bottom: 20px; letter-spacing: -1px; }
+    .hero h1 span { background: linear-gradient(135deg, #e94560, #ff6b81); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 18px; color: #888; max-width: 700px; margin: 0 auto 36px; }
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #e94560; color: #fff; padding: 14px 36px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; transition: all 0.2s; }
+    .btn-primary:hover { background: #c23152; transform: translateY(-1px); }
+    .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; padding: 14px 36px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 60px; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #fff; display: block; }
+    .stat-label { font-size: 13px; color: #666; margin-top: 4px; }
+    
+    /* Sections */
+    .section { margin-bottom: 80px; }
+    .section h2 { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+    .section h2 span { color: #e94560; }
+    .section > p { color: #888; font-size: 16px; max-width: 600px; margin-bottom: 40px; }
+    
+    /* Problem Cards */
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .problem-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 28px; }
+    .problem-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .problem-card h3 { color: #fff; font-size: 16px; margin-bottom: 8px; }
+    .problem-card p { color: #888; font-size: 14px; }
+    
+    /* Timeline */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, #e94560, rgba(233,69,96,0.2)); }
+    .timeline-item { position: relative; margin-bottom: 32px; }
+    .timeline-item::before { content: ''; position: absolute; left: -26px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: #e94560; border: 2px solid #0a0a0f; }
+    .timeline-item h3 { color: #fff; font-size: 16px; margin-bottom: 4px; }
+    .timeline-item p { color: #888; font-size: 14px; }
+    .timeline-item .date { color: #e94560; font-size: 12px; font-weight: 500; }
+    
+    /* Features */
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 28px; transition: border-color 0.2s; }
+    .feature-card:hover { border-color: rgba(233,69,96,0.3); }
+    .feature-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .feature-card h3 { color: #fff; font-size: 16px; margin-bottom: 8px; }
+    .feature-card p { color: #888; font-size: 14px; }
+    
+    /* Example Report */
+    .report-preview { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 32px; margin-top: 20px; }
+    .report-preview h3 { color: #fff; margin-bottom: 16px; }
+    .report-preview table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .report-preview th { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #888; font-weight: 500; }
+    .report-preview td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .report-preview .highlight { color: #e94560; font-weight: 600; }
+    
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pricing-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 28px; text-align: center; }
+    .pricing-card.featured { border-color: #e94560; position: relative; }
+    .pricing-card.featured::before { content: 'Popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #e94560; color: #fff; padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .pricing-card h3 { color: #fff; font-size: 18px; margin-bottom: 8px; }
+    .pricing-card .price { font-size: 36px; font-weight: 700; color: #fff; margin: 16px 0; }
+    .pricing-card .price span { font-size: 14px; color: #888; font-weight: 400; }
+    .pricing-card ul { list-style: none; margin: 20px 0; text-align: left; }
+    .pricing-card li { padding: 6px 0; font-size: 14px; color: #888; }
+    .pricing-card li::before { content: '✓ '; color: #e94560; }
+    .pricing-card .btn { display: block; background: rgba(255,255,255,0.06); color: #fff; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 14px; }
+    .pricing-card.featured .btn { background: #e94560; }
+    
+    /* How it works */
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
+    .step { text-align: center; }
+    .step-num { width: 40px; height: 40px; border-radius: 50%; background: rgba(233,69,96,0.15); color: #e94560; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; margin: 0 auto 12px; border: 1px solid rgba(233,69,96,0.3); }
+    .step h3 { color: #fff; font-size: 15px; margin-bottom: 6px; }
+    .step p { color: #888; font-size: 13px; }
+    
+    /* Footer */
+    footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 0; text-align: center; color: #555; font-size: 13px; }
+    footer a { color: #888; text-decoration: none; }
+    footer a:hover { color: #fff; }
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+        .hero h1 { font-size: 32px; }
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .problem-grid, .feature-grid, .pricing-grid, .steps { grid-template-columns: 1fr; }
+        nav a { margin-left: 16px; font-size: 13px; }
+    }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<nav class="container">
+    <div class="logo">CBAM <span>Comply</span></div>
+    <div>
+        <a href="#problem">Problem</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact" class="nav-cta">Get Started</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero container">
+    <div class="hero-badge">⚡ EU Regulation 2023/956 — Permanent Regime Since April 2026</div>
+    <h1>Automated CBAM <span>Quarterly Reporting</span></h1>
+    <p>Generate compliant EU Carbon Border Adjustment Mechanism reports from your import data. Automatically calculate embedded emissions, CBAM certificates, and carbon price deductions.</p>
+    <div class="hero-actions">
+        <a href="#features" class="btn-primary">See How It Works</a>
+        <a href="#pricing" class="btn-secondary">View Pricing →</a>
+    </div>
+</section>
+
+<!-- Stats -->
+<div class="container">
+<div class="stats">
+    <div class="stat">
+        <span class="stat-value">75-85%</span>
+        <span class="stat-label">Automation Potential</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">€10-50</span>
+        <span class="stat-label">Penalty per tCO₂e</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">20K+</span>
+        <span class="stat-label">EU Importers Affected</span>
+    </div>
+    <div class="stat">
+        <span class="stat-value">Quarterly</span>
+        <span class="stat-label">Reporting Frequency</span>
+    </div>
+</div>
+</div>
+
+<!-- Problem -->
+<section class="container section" id="problem">
+    <h2>The <span>Problem</span></h2>
+    <p>CBAM reporting is complex, manual, and carries serious financial penalties for errors.</p>
+    <div class="problem-grid">
+        <div class="problem-card">
+            <div class="icon">📊</div>
+            <h3>Complex Emission Calculations</h3>
+            <p>Each product category (cement, steel, aluminium, fertilisers, electricity, hydrogen) has different CN codes, emission factors, and calculation methodologies. Getting them wrong means penalties.</p>
+        </div>
+        <div class="problem-card">
+            <div class="icon">📅</div>
+            <h3>Quarterly Deadlines</h3>
+            <p>Reports are due every quarter under the permanent regime (since April 2026). Miss a deadline and you face €10-50/tCO₂e penalties plus potential exclusion from importing.</p>
+        </div>
+        <div class="problem-card">
+            <div class="icon">🌍</div>
+            <h3>Multi-Country Data</h3>
+            <p>Different countries have different carbon prices, default emission factors, and verification requirements. Tracking all 20+ major supplier countries is manual spreadsheet hell.</p>
+        </div>
+        <div class="problem-card">
+            <div class="icon">💰</div>
+            <h3>Expensive Consultants</h3>
+            <p>Big 4 firms charge €30K-€100K/year for CBAM advisory. Mid-size importers with 50-200 shipments/quarter can't justify that cost but can't afford errors either.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline -->
+<section class="container section">
+    <h2>Regulatory <span>Timeline</span></h2>
+    <p>CBAM enforcement is accelerating. Here's what's happened and what's coming.</p>
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="date">October 2023</span>
+            <h3>Transitional Phase Begins</h3>
+            <p>First CBAM quarterly reporting obligations begin. Reporting-only, no financial obligations.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="date">January 2026</span>
+            <h3>Permanent Regime Launches</h3>
+            <p>CBAM certificates become mandatory. Importers must purchase certificates matching embedded emissions.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="date">April 2026</span>
+            <h3>First Q1 Report Under Permanent Regime</h3>
+            <p>First quarterly report with real financial obligations. Deadline: end of April 2026.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="date">May 2026</span>
+            <h3>First Certificate Surrender Deadline</h3>
+            <p>Importers must surrender certificates corresponding to Q1 2026 embedded emissions.</p>
+        </div>
+        <div class="timeline-item">
+            <span class="date">2034</span>
+            <h3>Full Phase-Out of Free Allowances</h3>
+            <p>EU ETS free allowances fully phased out. CBAM covers 100% of carbon cost.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="container section" id="features">
+    <h2>How <span>CBAM Comply</span> Works</h2>
+    <p>Upload your import data — get a compliant CBAM quarterly report in seconds.</p>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h3>Upload Data</h3>
+            <p>CSV or JSON with CN codes, quantities, countries of origin. Optional: verified emission factors.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h3>Auto-Calculate</h3>
+            <p>Engine matches CN codes to sectors, looks up default emission factors, calculates embedded emissions.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h3>Deductions</h3>
+            <p>Carbon prices paid in country of origin are automatically deducted from certificate requirements.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <h3>Download Report</h3>
+            <p>Professional HTML report ready for submission. Includes JSON export for data integration.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="container section">
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">📋</div>
+            <h3>84 CN Codes</h3>
+            <p>Full coverage of all CBAM sectors: cement (7), iron & steel (24), aluminium (24), fertilisers (27), electricity, hydrogen.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🌐</div>
+            <h3>30+ Countries</h3>
+            <p>Carbon price data for all major supplier countries. Automatic deduction for China ETS, UK ETS, Korea ETS, Canada, Japan.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🛡️</div>
+            <h3>Security Built-In</h3>
+            <p>Path traversal, injection, and overflow protection. Your import data stays on your infrastructure.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📄</div>
+            <h3>Professional Reports</h3>
+            <p>Print-ready HTML with declarant info, sector breakdown, detailed goods table, carbon price deduction, and declaration statement.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🔌</div>
+            <h3>API-Ready</h3>
+            <p>JSON output for seamless integration with ERP systems, customs software, and data pipelines.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">⚡</div>
+            <h3>CLI-First</h3>
+            <p>Simple command-line interface. No complex setup, no cloud dependency. Works on any Linux server.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Report Preview -->
+<section class="container section">
+    <h2>Sample <span>Report Output</span></h2>
+    <p>Here's what a generated CBAM quarterly report looks like.</p>
+    <div class="report-preview">
+        <h3>CBAM Quarterly Report — Q1 2026</h3>
+        <table>
+            <thead>
+                <tr><th>CN Code</th><th>Description</th><th>Origin</th><th>Qty (t)</th><th>EF (tCO₂e/t)</th><th>Emissions</th><th>Certificates</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>7601.10.00</td><td>Unwrought aluminium</td><td>RU</td><td>1,500</td><td>2.100</td><td>3,150.00</td><td>3,150.00</td></tr>
+                <tr><td>7601.20.00</td><td>Aluminium alloys</td><td>UA</td><td>850</td><td>1.750</td><td>1,487.50</td><td>1,487.50</td></tr>
+                <tr><td>7201.10.00</td><td>Non-alloy pig iron</td><td>UA</td><td>3,200</td><td>1.500</td><td>4,800.00</td><td>4,800.00</td></tr>
+                <tr><td>7208.10.00</td><td>Flat-rolled steel coils</td><td>CN</td><td>2,800</td><td>1.800</td><td>5,040.00</td><td>4,446.35</td></tr>
+                <tr><td>2523.10.00</td><td>Cement clinkers</td><td>DZ</td><td>5,000</td><td>0.950</td><td>4,750.00</td><td>4,750.00</td></tr>
+                <tr style="font-weight: 700; color: #e94560"><td colspan="4">TOTAL</td><td></td><td><span class="highlight">24,177.50</span></td><td><span class="highlight">23,554.91</span></td></tr>
+            </tbody>
+        </table>
+        <p style="color: #888; font-size: 13px; margin-top: 16px;">
+            ✓ Auto-detects CN code sectors &nbsp;•&nbsp; ✓ Default emission factors for all products &nbsp;•&nbsp; ✓ Carbon price deduction (China ETS: €10.50/tCO₂e)
+        </p>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section class="container section" id="pricing">
+    <h2>Simple <span>Pricing</span></h2>
+    <p>Flat-rate pricing for unlimited imports per quarter. No per-shipment fees.</p>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <h3>Starter</h3>
+            <div class="price">€500<span>/quarter</span></div>
+            <ul>
+                <li>Up to 3 CN code lines</li>
+                <li>Single declarant</li>
+                <li>Default emission factors</li>
+                <li>HTML report</li>
+                <li>Email support</li>
+            </ul>
+            <a href="#contact" class="btn">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+            <h3>Growth</h3>
+            <div class="price">€1,500<span>/quarter</span></div>
+            <ul>
+                <li>Unlimited CN code lines</li>
+                <li>Single declarant</li>
+                <li>Custom emission factors</li>
+                <li>HTML + JSON export</li>
+                <li>API access</li>
+                <li>Priority support</li>
+            </ul>
+            <a href="#contact" class="btn">Get Started</a>
+        </div>
+        <div class="pricing-card">
+            <h3>Enterprise</h3>
+            <div class="price">Custom</div>
+            <ul>
+                <li>Multiple declarants</li>
+                <li>ERP integration</li>
+                <li>Multi-user access</li>
+                <li>Custom reporting templates</li>
+                <li>SLA guarantee</li>
+                <li>Dedicated account manager</li>
+            </ul>
+            <a href="#contact" class="btn">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Now -->
+<section class="container section">
+    <h2>Why <span>Now?</span></h2>
+    <p>The CBAM permanent regime started in April 2026. Every quarter without automated reporting costs you time, money, and risk.</p>
+    <div class="problem-grid">
+        <div class="problem-card" style="border-color: rgba(233,69,96,0.3);">
+            <div class="icon">⏰</div>
+            <h3>Q1 2026 Already Due</h3>
+            <p>The first quarterly report under the permanent regime was due in April 2026. If you're manual, you've already missed the first deadline.</p>
+        </div>
+        <div class="problem-card" style="border-color: rgba(233,69,96,0.3);">
+            <div class="icon">📈</div>
+            <h3>Penalties Are Real</h3>
+            <p>€10-50 per tCO₂e underreported. For a mid-size importer with 10,000 tCO₂e/quarter, that's €100K-€500K risk per quarter from reporting errors alone.</p>
+        </div>
+        <div class="problem-card" style="border-color: rgba(233,69,96,0.3);">
+            <div class="icon">🤖</div>
+            <h3>Automation Is Trivial Here</h3>
+            <p>CBAM is formula-driven (emission factors × quantities — with simple deductions). No judgment calls, no narrative writing. 75-85% automation is realistic with today's tech.</p>
+        </div>
+        <div class="problem-card" style="border-color: rgba(233,69,96,0.3);">
+            <div class="icon">🏆</div>
+            <h3>First-Mover Advantage</h3>
+            <p>No dedicated CBAM reporting automation product exists yet. Existing tools are ERP plugins or carbon accounting dashboards — none auto-generate the quarterly report.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="container section" id="contact" style="text-align: center; padding: 60px 0; border-top: 1px solid rgba(255,255,255,0.06);">
+    <h2 style="font-size: 36px;">Ready to <span>Automate</span> Your CBAM Reporting?</h2>
+    <p style="max-width: 500px; margin: 0 auto 32px;">Stop manually calculating embedded emissions. Generate compliant CBAM reports in seconds.</p>
+    <div class="hero-actions">
+        <a href="mailto:rastislav.drahos@drahos.sk" class="btn-primary">Contact Us</a>
+        <a href="#" class="btn-secondary" onclick="alert('Try: python -m cbam_agent generate report --declarant demo --quarter 2026-Q1')">Try Demo →</a>
+    </div>
+</section>
+
+<footer class="container">
+    <p>CBAM Comply © 2026 <a href="https://dancenitra.sk">DanceNitra</a>. All rights reserved.</p>
+    <p style="margin-top: 4px;">EU Regulation 2023/956 — Carbon Border Adjustment Mechanism | Contact: rastislav.drahos@drahos.sk</p>
+</footer>
+
+</body>
+</html>
