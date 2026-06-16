@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBAM Comply — Automated CBAM Reporting</title>
+<script src="js/cbam-data.json"></script>
+<script defer src="js/cbam-engine.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --bg: #0a0a0f;
+        --card: #14141e;
+        --border: rgba(255,255,255,0.08);
+        --text: #e0e0e0;
+        --muted: #666;
+        --accent: #e94560;
+        --accent-hover: #c23152;
+        --success: #4caf50;
+        --radius: 10px;
+        --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    /* Nav */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+    .logo { font-size: 20px; font-weight: 700; color: #fff; }
+    .logo span { color: var(--accent); }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; margin-left: 24px; }
+    nav a:hover { color: #fff; }
+    .badge { background: rgba(233,69,96,0.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 11px; border: 1px solid rgba(233,69,96,0.3); }
+
+    /* Layout */
+    .app-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; margin-bottom: 40px; }
+
+    /* Cards */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: #fff; }
+
+    /* Form */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+    input, select, textarea {
+        width: 100%; padding: 9px 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+        border-radius: 6px; color: #fff; font-size: 13px; font-family: var(--font); transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    select option { background: #1a1a2e; color: #fff; }
+    textarea { resize: vertical; min-height: 60px; font-family: 'Consolas', monospace; font-size: 12px; }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border: none;
+        border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        font-family: var(--font); text-decoration: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { background: #43a047; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-block { width: 100%; justify-content: center; }
+
+    /* Upload zone */
+    .drop-zone {
+        border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px;
+        text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 16px;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent); background: rgba(233,69,96,0.05); }
+    .drop-zone .icon { font-size: 32px; margin-bottom: 8px; }
+    .drop-zone p { color: var(--muted); font-size: 13px; }
+    .drop-zone .filename { color: var(--accent); font-weight: 500; margin-top: 8px; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin: 12px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; }
+    td { padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Summary */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 16px 0; }
+    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-card .val { font-size: 22px; font-weight: 700; color: #fff; display: block; }
+    .stat-card .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .stat-card.accent { border-color: var(--accent); }
+
+    /* Steps */
+    .steps { display: flex; gap: 8px; margin-bottom: 24px; }
+    .step { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+    .step.active { color: #fff; }
+    .step .num { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+    .step.active .num { background: var(--accent); color: #fff; }
+    .step.done .num { background: var(--success); color: #fff; }
+    .step-connector { flex: 1; height: 1px; background: var(--border); margin: 0 4px; }
+
+    /* Section visibility */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* Manual add row */
+    .manual-row { display: grid; grid-template-columns: 120px 1fr 90px 70px 1fr 50px; gap: 6px; align-items: center; margin-bottom: 6px; }
+    .manual-row input, .manual-row select { font-size: 12px; padding: 6px 8px; }
+    .btn-icon { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 18px; padding: 2px; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 20px; font-size: 13px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); transform: translateY(100px); opacity: 0; transition: all 0.4s; z-index: 1000; max-width: 360px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    .tab-bar { display: flex; gap: 4px; margin-bottom: 16px; }
+    .tab-btn { padding: 8px 16px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 6px; cursor: pointer; font-size: 13px; font-family: var(--font); }
+    .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.04); }
+
+    .goods-stats { font-size: 12px; color: var(--muted); margin: 8px 0; }
+
+    @media (max-width: 768px) {
+        .app-grid { grid-template-columns: 1fr; }
+        .manual-row { grid-template-columns: 1fr 1fr; }
+    }
+</style>
+</head>
+<body>
+<nav class="container">
+    <div class="logo">🌿 CBAM <span>Comply</span></div>
+    <div>
+        <span class="badge">Browser-only — your data stays local</span>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Steps -->
+    <div class="steps" id="stepsBar">
+        <div class="step active" data-step="1"><span class="num">1</span> Declarant</div>
+        <div class="step-connector"></div>
+        <div class="step" data-step="2"><span class="num">2</span> Import Goods</div>
+        <div class="step-connector"></div>
+        <div class="step" data-step="3"><span class="num">3</span> Report</div>
+    </div>
+
+    <div class="app-grid">
+        <!-- LEFT: Declarant Form -->
+        <div>
+            <div class="card page-section active" id="step1">
+                <div class="card-title">📋 Declarant Information</div>
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="companyName" value="DanceNitra Trading s.r.o.">
+                </div>
+                <div class="form-group">
+                    <label>EORI Number</label>
+                    <input type="text" id="eori" value="SK1234567890EORI">
+                </div>
+                <div class="form-group">
+                    <label>VAT Number</label>
+                    <input type="text" id="vatNumber" value="SK2024123456">
+                </div>
+                <div class="form-group">
+                    <label>IČO / Registration</label>
+                    <input type="text" id="regNumber" value="56781234">
+                </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <select id="country"><option value="SK" selected>Slovakia (SK)</option><option value="CZ">Czech Republic (CZ)</option><option value="AT">Austria (AT)</option><option value="PL">Poland (PL)</option><option value="HU">Hungary (HU)</option><option value="DE">Germany (DE)</option></select>
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="city" value="Nitra">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="address" value="Hlavná 123, 949 01">
+                </div>
+                <div class="form-group">
+                    <label>Contact Person</label>
+                    <input type="text" id="contactPerson" value="Rastislav Drahoš">
+                </div>
+                <div class="form-group">
+                    <label>Contact Email</label>
+                    <input type="email" id="contactEmail" value="rastislav.drahos@drahos.sk">
+                </div>
+                <div class="form-group">
+                    <label>Quarter</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                        <select id="quarterYear"><option value="2026">2026</option><option value="2027">2027</option></select>
+                        <select id="quarter"><option value="1">Q1 (Jan-Mar)</option><option value="2">Q2 (Apr-Jun)</option><option value="3">Q3 (Jul-Sep)</option><option value="4">Q4 (Oct-Dec)</option></select>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="goToStep(2)" style="margin-top:8px">Next: Import Goods →</button>
+            </div>
+
+            <div class="card page-section" id="step2">
+                <div class="card-title">📦 Import Goods</div>
+
+                <div class="tab-bar">
+                    <button class="tab-btn active" onclick="switchTab('upload')" id="tabUpload">📤 Upload</button>
+                    <button class="tab-btn" onclick="switchTab('manual')" id="tabManual">⌨️ Manual</button>
+                </div>
+
+                <!-- Upload tab -->
+                <div id="panelUpload">
+                    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon">📂</div>
+                        <p>Drop CSV or Excel file here, or click to browse</p>
+                        <p style="font-size:11px;margin-top:4px">Supports: CSV (; or ,), XLSX — columns: CN Code, Quantity, Country</p>
+                        <div class="filename" id="fileName"></div>
+                    </div>
+                    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
+                    <div id="uploadPreview"></div>
+                </div>
+
+                <!-- Manual tab -->
+                <div id="panelManual" style="display:none">
+                    <div id="manualRows">
+                        <div class="manual-row">
+                            <input type="text" class="cn-input" placeholder="CN Code" value="7601.10.00">
+                            <input type="text" class="desc-input" placeholder="Description" value="Unwrought aluminium">
+                            <input type="number" class="qty-input" placeholder="Qty" value="1500">
+                            <input type="text" class="ctry-input" placeholder="SK" value="RU" style="text-transform:uppercase">
+                            <input type="number" class="ef-input" placeholder="EF (opt)" step="0.001">
+                            <button class="btn-icon" onclick="this.parentElement.remove()">✕</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addManualRow()" style="margin-bottom:12px">+ Add Row</button>
+                    <div id="manualPreview"></div>
+                    <div style="display:flex;gap:8px;margin-top:8px">
+                        <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+                        <button class="btn btn-primary" onclick="processManualData()">Generate Report →</button>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:8px;margin-top:12px;display:none" id="uploadActions">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+                    <button class="btn btn-primary" onclick="processUploadedData()">Generate Report →</button>
+                </div>
+            </div>
+
+            <div class="card page-section" id="step3">
+                <div class="card-title">📊 Report Summary</div>
+                <div id="reportSummary"></div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                    <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+                    <button class="btn btn-success" onclick="downloadReport()">📥 Download HTML Report</button>
+                    <button class="btn btn-secondary" onclick="downloadJSON()">📥 Download JSON</button>
+                    <button class="btn btn-secondary" onclick="resetApp()">🔄 New Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Preview -->
+        <div>
+            <div class="card">
+                <div class="card-title">👁️ Preview <span style="font-size:11px;color:var(--muted);font-weight:400">— generated report</span></div>
+                <div id="previewPanel">
+                    <div style="text-align:center;padding:40px 0;color:var(--muted);font-size:13px">
+                        <div style="font-size:40px;margin-bottom:12px">🌿</div>
+                        <p>Enter goods and generate your first CBAM report.</p>
+                        <p style="font-size:11px;margin-top:4px">All data processed locally in your browser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// -----------------------------------------------------------------------
+// State
+// -----------------------------------------------------------------------
+let uploadedRows = null;
+let currentReport = null;
+let reportHtml = '';
+
+// -----------------------------------------------------------------------
+// Step navigation
+// -----------------------------------------------------------------------
+function goToStep(n) {
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(`step${n}`).classList.add('active');
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+}
+
+// -----------------------------------------------------------------------
+// Tabs
+// -----------------------------------------------------------------------
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+    document.getElementById('panelUpload').style.display = tab === 'upload' ? '' : 'none';
+    document.getElementById('panelManual').style.display = tab === 'manual' ? '' : 'none';
+}
+
+// -----------------------------------------------------------------------
+// File upload
+// -----------------------------------------------------------------------
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
+
+async function handleFile(file) {
+    if (!file) return;
+    document.getElementById('fileName').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+
+    try {
+        let rows;
+        if (file.name.endsWith('.csv')) {
+            const text = await file.text();
+            rows = CBAM.parseCSV(text);
+        } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+            rows = await CBAM.parseExcel(file);
+        } else {
+            throw new Error('Unsupported format. Use CSV or XLSX.');
+        }
+
+        if (rows.length === 0) throw new Error('No data rows found.');
+
+        // Normalize columns
+        uploadedRows = rows.map(r => CBAM.mapColumns(r));
+
+        // Preview
+        const preview = document.getElementById('uploadPreview');
+        if (uploadedRows.length === 0) {
+            preview.innerHTML = '<div style="color:var(--accent);font-size:13px;margin-top:8px">⚠️ No recognizable columns found.</div>';
+            return;
+        }
+
+        let tableHtml = `<div class="goods-stats">✅ ${uploadedRows.length} rows recognized</div><div class="table-wrap"><table>
+            <thead><tr><th>CN Code</th><th>Description</th><th>Qty</th><th>Country</th></tr></thead><tbody>`;
+        uploadedRows.forEach(r => {
+            const cn = r.cn_code || '—';
+            const desc = (r.description || '—').slice(0, 40);
+            const qty = r.quantity || '—';
+            const ctry = r.country || '—';
+            tableHtml += `<tr><td>${cn}</td><td>${desc}</td><td>${qty}</td><td>${ctry}</td></tr>`;
+        });
+        tableHtml += '</tbody></table></div>';
+        preview.innerHTML = tableHtml;
+        document.getElementById('uploadActions').style.display = 'flex';
+
+    } catch (err) {
+        uploadedRows = null;
+        document.getElementById('uploadPreview').innerHTML = `<div style="color:var(--accent);font-size:13px;margin-top:8px">❌ ${err.message}</div>`;
+    }
+}
+
+// -----------------------------------------------------------------------
+// Manual rows
+// -----------------------------------------------------------------------
+function addManualRow(cn, desc, qty, ctry, ef) {
+    const div = document.createElement('div');
+    div.className = 'manual-row';
+    div.innerHTML = `
+        <input type="text" class="cn-input" placeholder="CN Code" value="${cn || ''}">
+        <input type="text" class="desc-input" placeholder="Description" value="${desc || ''}">
+        <input type="number" class="qty-input" placeholder="Qty" value="${qty || ''}">
+        <input type="text" class="ctry-input" placeholder="SK" value="${ctry || ''}" style="text-transform:uppercase">
+        <input type="number" class="ef-input" placeholder="EF (opt)" step="0.001" value="${ef || ''}">
+        <button class="btn-icon" onclick="this.parentElement.remove()">✕</button>
+    `;
+    document.getElementById('manualRows').appendChild(div);
+}
+
+// -----------------------------------------------------------------------
+// Process data
+// -----------------------------------------------------------------------
+async function processUploadedData() {
+    if (!uploadedRows || uploadedRows.length === 0) {
+        showToast('Upload goods data first');
+        return;
+    }
+    generateReportFromRows(uploadedRows);
+}
+
+function processManualData() {
+    const rows = [];
+    document.querySelectorAll('#manualRows .manual-row').forEach(row => {
+        const cn = row.querySelector('.cn-input').value.trim();
+        const qty = parseFloat(row.querySelector('.qty-input').value);
+        const ctry = row.querySelector('.ctry-input').value.trim().toUpperCase();
+        if (cn && qty > 0 && ctry) {
+            const ef = parseFloat(row.querySelector('.ef-input').value);
+            rows.push({
+                cn_code: cn,
+                quantity: qty,
+                country: ctry,
+                actual_emissions: ef > 0 ? ef : null,
+                description: row.querySelector('.desc-input').value.trim(),
+            });
+        }
+    });
+
+    if (rows.length === 0) {
+        showToast('Add at least one valid row');
+        return;
+    }
+    generateReportFromRows(rows);
+}
+
+async function generateReportFromRows(rows) {
+    try {
+        await CBAM.loadData();
+
+        const declarant = {
+            company_name: document.getElementById('companyName').value,
+            company_eori: document.getElementById('eori').value,
+            vat_number: document.getElementById('vatNumber').value,
+            registration_number: document.getElementById('regNumber').value,
+            country: document.getElementById('country').value,
+            city: document.getElementById('city').value,
+            address: document.getElementById('address').value,
+            contact_person: document.getElementById('contactPerson').value,
+            contact_email: document.getElementById('contactEmail').value,
+        };
+
+        // Process rows: normalize CN codes
+        const goods = [];
+        for (const row of rows) {
+            const cn = CBAM.normalizeCN(row.cn_code || row.cnCode || '');
+            if (!cn) continue;
+            const qty = parseFloat(row.quantity || row.qty || '0');
+            if (!qty || qty <= 0) continue;
+            const country = (row.country || row.origin || '').toUpperCase();
+            if (!country || country.length !== 2) continue;
+
+            goods.push({
+                cn_code: cn,
+                quantity: qty,
+                country: country,
+                actual_emissions: row.actual_emissions || row.actualEf || null,
+                unit: row.unit || 'tonnes',
+            });
+        }
+
+        if (goods.length === 0) {
+            showToast('No valid goods found. Check CN codes and quantities.');
+            return;
+        }
+
+        const year = parseInt(document.getElementById('quarterYear').value);
+        const quarter = parseInt(document.getElementById('quarter').value);
+
+        currentReport = CBAM.calculateReport(declarant, goods, year, quarter);
+        reportHtml = CBAM.generateHTML(currentReport);
+
+        // Show summary
+        showReportSummary(currentReport);
+
+        // Update preview
+        document.getElementById('previewPanel').innerHTML = `
+            <div style="font-size:12px;line-height:1.6">
+                <div style="background:rgba(233,69,96,0.1);border:1px solid rgba(233,69,96,0.3);border-radius:8px;padding:14px;margin-bottom:14px">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                        <div><span style="color:var(--muted)">Report ID:</span><br><strong>${currentReport.report_id}</strong></div>
+                        <div><span style="color:var(--muted)">Quarter:</span><br><strong>${currentReport.quarter_label}</strong></div>
+                        <div><span style="color:var(--muted)">Emissions:</span><br><strong>${CBAM.fmtNum(currentReport.totals.total_embedded_emissions)} tCO₂e</strong></div>
+                        <div><span style="color:var(--muted)">Certificates:</span><br><strong>${CBAM.fmtNum(currentReport.totals.total_certificates_needed)}</strong></div>
+                        <div><span style="color:var(--muted)">Certificate Cost:</span><br><strong>€${CBAM.fmtNum(currentReport.totals.total_certificate_cost_eur)}</strong></div>
+                        <div><span style="color:var(--muted)">Goods:</span><br><strong>${goods.length}</strong></div>
+                    </div>
+                </div>
+                <div class="table-wrap"><table>
+                    <thead><tr><th>CN Code</th><th>Qty (t)</th><th>Origin</th><th>EF</th><th>tCO₂e</th></tr></thead>
+                    <tbody>
+                        ${currentReport.goods.map(g => `<tr><td>${g.cn_code}</td><td>${CBAM.fmtNum(g.quantity)}</td><td>${g.country}</td><td>${CBAM.fmtNum(g.emission_factor, 4)}</td><td><strong>${CBAM.fmtNum(g.total_emissions)}</strong></td></tr>`).join('')}
+                    </tbody>
+                </table></div>
+            </div>`;
+
+        goToStep(3);
+        showToast(`✅ Report generated — ${goods.length} goods, ${CBAM.fmtNum(currentReport.totals.total_embedded_emissions)} tCO₂e`);
+
+    } catch (err) {
+        showToast('❌ Error: ' + err.message);
+        console.error(err);
+    }
+}
+
+function showReportSummary(report) {
+    const el = document.getElementById('reportSummary');
+    el.innerHTML = `
+        <div class="summary-grid">
+            <div class="stat-card accent">
+                <span class="val">${CBAM.fmtNum(report.totals.total_embedded_emissions)}</span>
+                <span class="lbl">Total Emissions (tCO₂e)</span>
+            </div>
+            <div class="stat-card">
+                <span class="val">${CBAM.fmtNum(report.totals.total_certificates_needed)}</span>
+                <span class="lbl">CBAM Certificates</span>
+            </div>
+            <div class="stat-card">
+                <span class="val">€${CBAM.fmtNum(report.totals.total_certificate_cost_eur)}</span>
+                <span class="lbl">Certificate Cost</span>
+            </div>
+            <div class="stat-card">
+                <span class="val">${report.goods.length}</span>
+                <span class="lbl">Goods Declared</span>
+            </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px">
+            ${report.report_id} · ${report.quarter_label} · Generated ${new Date(report.generated_at).toLocaleString('sk-SK')}
+        </div>`;
+}
+
+// -----------------------------------------------------------------------
+// Download
+// -----------------------------------------------------------------------
+function downloadReport() {
+    if (!reportHtml) { showToast('No report generated yet'); return; }
+    const blob = new Blob([reportHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentReport.report_id}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ Report downloaded');
+}
+
+function downloadJSON() {
+    if (!currentReport) { showToast('No report generated yet'); return; }
+    const blob = new Blob([JSON.stringify(currentReport, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentReport.report_id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ JSON downloaded');
+}
+
+// -----------------------------------------------------------------------
+// Reset
+// -----------------------------------------------------------------------
+function resetApp() {
+    currentReport = null;
+    reportHtml = '';
+    uploadedRows = null;
+    document.getElementById('uploadPreview').innerHTML = '';
+    document.getElementById('fileName').textContent = '';
+    document.getElementById('uploadActions').style.display = 'none';
+    document.getElementById('previewPanel').innerHTML = `
+        <div style="text-align:center;padding:40px 0;color:var(--muted);font-size:13px">
+            <div style="font-size:40px;margin-bottom:12px">🌿</div>
+            <p>Enter goods and generate your first CBAM report.</p>
+            <p style="font-size:11px;margin-top:4px">All data processed locally in your browser.</p>
+        </div>`;
+    goToStep(1);
+    showToast('🔄 Reset complete');
+}
+
+// -----------------------------------------------------------------------
+// Toast
+// -----------------------------------------------------------------------
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._hide);
+    t._hide = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>

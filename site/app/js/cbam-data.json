@@ -1,0 +1,453 @@
+{
+  "sectors": {
+    "cement": {
+      "name": "Cement",
+      "cn_codes": {
+        "2523.10.00": {
+          "description": "Cement clinkers",
+          "default_ef": 0.86
+        },
+        "2523.21.00": {
+          "description": "White Portland cement",
+          "default_ef": 0.75
+        },
+        "2523.29.00": {
+          "description": "Other Portland cement",
+          "default_ef": 0.75
+        },
+        "2523.30.00": {
+          "description": "Aluminous cement",
+          "default_ef": 0.72
+        },
+        "2523.90.00": {
+          "description": "Other hydraulic cements",
+          "default_ef": 0.7
+        },
+        "6810.11.10": {
+          "description": "Building blocks and bricks of cement",
+          "default_ef": 0.5
+        },
+        "6810.91.00": {
+          "description": "Prefabricated structural components of cement",
+          "default_ef": 0.55
+        }
+      }
+    },
+    "iron_steel": {
+      "name": "Iron & Steel",
+      "cn_codes": {
+        "7201.10.00": {
+          "description": "Non-alloy pig iron",
+          "default_ef": 1.35
+        },
+        "7201.20.00": {
+          "description": "Alloy pig iron",
+          "default_ef": 1.3
+        },
+        "7202.11.00": {
+          "description": "Ferro-manganese >2% carbon",
+          "default_ef": 0.95
+        },
+        "7202.19.00": {
+          "description": "Ferro-manganese other",
+          "default_ef": 0.9
+        },
+        "7202.30.00": {
+          "description": "Ferro-silico-manganese",
+          "default_ef": 0.85
+        },
+        "7203.10.00": {
+          "description": "Ferrous products from direct reduction",
+          "default_ef": 1.1
+        },
+        "7205.10.00": {
+          "description": "Granules of pig iron",
+          "default_ef": 1.2
+        },
+        "7207.11.00": {
+          "description": "Semi-finished of iron <0.25% carbon",
+          "default_ef": 1.1
+        },
+        "7207.12.10": {
+          "description": "Semi-finished other <0.25% carbon",
+          "default_ef": 1.0
+        },
+        "7207.19.00": {
+          "description": "Semi-finished other",
+          "default_ef": 0.9
+        },
+        "7208.10.00": {
+          "description": "Flat-rolled in coils, hot-rolled",
+          "default_ef": 1.25
+        },
+        "7209.15.00": {
+          "description": "Flat-rolled cold-rolled >=3mm",
+          "default_ef": 1.15
+        },
+        "7210.11.00": {
+          "description": "Flat-rolled plated or coated with tin",
+          "default_ef": 1.1
+        },
+        "7213.10.00": {
+          "description": "Bars and rods irregular coils",
+          "default_ef": 1.05
+        },
+        "7214.20.00": {
+          "description": "Bars and rods of iron or steel",
+          "default_ef": 1.0
+        },
+        "7216.10.00": {
+          "description": "U, I, H sections hot-rolled",
+          "default_ef": 1.1
+        },
+        "7219.11.00": {
+          "description": "Flat-rolled stainless steel hot-rolled >=4.75mm",
+          "default_ef": 1.4
+        },
+        "7222.11.00": {
+          "description": "Bars and rods stainless steel hot-rolled",
+          "default_ef": 1.3
+        },
+        "7301.10.00": {
+          "description": "Sheet piling of iron or steel",
+          "default_ef": 1.15
+        },
+        "7302.10.00": {
+          "description": "Railway rails of iron or steel",
+          "default_ef": 1.2
+        },
+        "7304.11.00": {
+          "description": "Seamless stainless steel pipes",
+          "default_ef": 1.3
+        },
+        "7305.11.00": {
+          "description": "Longitudinally submerged arc welded pipes",
+          "default_ef": 1.25
+        },
+        "7312.10.00": {
+          "description": "Stranded wire of iron or steel",
+          "default_ef": 1.0
+        },
+        "7318.11.00": {
+          "description": "Screw, bolt, nut of iron or steel",
+          "default_ef": 0.95
+        }
+      }
+    },
+    "aluminium": {
+      "name": "Aluminium",
+      "cn_codes": {
+        "7601.10.00": {
+          "description": "Unwrought aluminium not alloyed",
+          "default_ef": 1.8
+        },
+        "7601.20.00": {
+          "description": "Unwrought aluminium alloys",
+          "default_ef": 1.65
+        },
+        "7603.10.00": {
+          "description": "Powders of aluminium non-lamellar",
+          "default_ef": 1.9
+        },
+        "7603.20.00": {
+          "description": "Powders of aluminium lamellar",
+          "default_ef": 1.85
+        },
+        "7604.10.00": {
+          "description": "Aluminium bars and rods not alloyed",
+          "default_ef": 1.7
+        },
+        "7604.21.00": {
+          "description": "Aluminium hollow profiles",
+          "default_ef": 1.65
+        },
+        "7604.29.00": {
+          "description": "Aluminium bars other profiles",
+          "default_ef": 1.6
+        },
+        "7605.11.00": {
+          "description": "Aluminium wire non-alloy max 7mm",
+          "default_ef": 1.75
+        },
+        "7605.21.00": {
+          "description": "Aluminium wire alloy max 7mm",
+          "default_ef": 1.65
+        },
+        "7606.11.00": {
+          "description": "Aluminium plates non-alloy >=6mm",
+          "default_ef": 1.7
+        },
+        "7606.12.00": {
+          "description": "Aluminium plates alloy >=6mm",
+          "default_ef": 1.6
+        },
+        "7607.11.00": {
+          "description": "Aluminium foil backed <=0.2mm",
+          "default_ef": 1.7
+        },
+        "7607.19.00": {
+          "description": "Aluminium foil other",
+          "default_ef": 1.65
+        },
+        "7608.10.00": {
+          "description": "Aluminium tubes and pipes non-alloy",
+          "default_ef": 1.7
+        },
+        "7608.20.00": {
+          "description": "Aluminium tubes and pipes alloys",
+          "default_ef": 1.6
+        },
+        "7609.00.00": {
+          "description": "Aluminium tube/pipe fittings",
+          "default_ef": 1.65
+        },
+        "7610.10.00": {
+          "description": "Aluminium structures for buildings",
+          "default_ef": 1.5
+        },
+        "7610.90.00": {
+          "description": "Aluminium structures other",
+          "default_ef": 1.5
+        },
+        "7611.00.00": {
+          "description": "Aluminium tanks and vats",
+          "default_ef": 1.55
+        },
+        "7612.10.00": {
+          "description": "Aluminium collapsible tubular containers",
+          "default_ef": 1.6
+        },
+        "7613.00.00": {
+          "description": "Aluminium containers for compressed gas",
+          "default_ef": 1.6
+        },
+        "7614.10.00": {
+          "description": "Stranded wire steel core aluminium",
+          "default_ef": 1.7
+        },
+        "7614.90.00": {
+          "description": "Stranded wire aluminium other",
+          "default_ef": 1.65
+        },
+        "7616.99.10": {
+          "description": "Aluminium articles other",
+          "default_ef": 1.5
+        }
+      }
+    },
+    "fertilizers": {
+      "name": "Fertilizers",
+      "cn_codes": {
+        "2808.00.00": {
+          "description": "Nitric acid",
+          "default_ef": 0.35
+        },
+        "2814.10.00": {
+          "description": "Anhydrous ammonia",
+          "default_ef": 1.6
+        },
+        "2814.20.00": {
+          "description": "Ammonia in aqueous solution",
+          "default_ef": 1.0
+        },
+        "2834.21.00": {
+          "description": "Potassium nitrates",
+          "default_ef": 0.65
+        },
+        "3102.10.10": {
+          "description": "Urea >45% nitrogen",
+          "default_ef": 1.8
+        },
+        "3102.10.90": {
+          "description": "Urea other",
+          "default_ef": 1.7
+        },
+        "3102.21.00": {
+          "description": "Ammonium sulphate",
+          "default_ef": 0.9
+        },
+        "3102.30.00": {
+          "description": "Ammonium nitrate",
+          "default_ef": 1.35
+        },
+        "3102.40.00": {
+          "description": "Ammonium nitrate with calcium carbonate",
+          "default_ef": 1.0
+        },
+        "3102.50.00": {
+          "description": "Sodium nitrate",
+          "default_ef": 0.55
+        },
+        "3102.60.00": {
+          "description": "Calcium nitrate",
+          "default_ef": 0.7
+        },
+        "3102.80.00": {
+          "description": "Urea and ammonium nitrate mixtures",
+          "default_ef": 1.5
+        },
+        "3102.90.00": {
+          "description": "Other nitrogenous fertilizers",
+          "default_ef": 1.2
+        },
+        "3103.11.00": {
+          "description": "Superphosphates <35% P2O5",
+          "default_ef": 0.3
+        },
+        "3103.19.00": {
+          "description": "Superphosphates other",
+          "default_ef": 0.25
+        },
+        "3103.20.00": {
+          "description": "Basic slag",
+          "default_ef": 0.2
+        },
+        "3103.90.00": {
+          "description": "Other phosphate fertilizers",
+          "default_ef": 0.25
+        },
+        "3104.20.00": {
+          "description": "Potassium chloride",
+          "default_ef": 0.2
+        },
+        "3104.30.00": {
+          "description": "Potassium sulphate",
+          "default_ef": 0.25
+        },
+        "3105.10.00": {
+          "description": "Mineral/chemical fertilizers in tablets",
+          "default_ef": 0.8
+        },
+        "3105.20.00": {
+          "description": "NPK fertilizers",
+          "default_ef": 0.9
+        },
+        "3105.30.00": {
+          "description": "Diammonium hydrogenorthophosphate",
+          "default_ef": 0.7
+        },
+        "3105.40.00": {
+          "description": "Ammonium dihydrogenorthophosphate",
+          "default_ef": 0.65
+        },
+        "3105.51.00": {
+          "description": "Nitrates and phosphates mixtures",
+          "default_ef": 0.75
+        },
+        "3105.59.00": {
+          "description": "Other NP mixtures",
+          "default_ef": 0.8
+        },
+        "3105.60.00": {
+          "description": "PK fertilizers",
+          "default_ef": 0.4
+        },
+        "3105.90.00": {
+          "description": "Other fertilizers",
+          "default_ef": 0.7
+        }
+      }
+    },
+    "electricity": {
+      "name": "Electricity",
+      "cn_codes": {
+        "2716.00.00": {
+          "description": "Electrical energy",
+          "default_ef": 0.432
+        }
+      }
+    },
+    "hydrogen": {
+      "name": "Hydrogen",
+      "cn_codes": {
+        "2804.10.00": {
+          "description": "Hydrogen",
+          "default_ef": 9.3
+        }
+      }
+    }
+  },
+  "country_names": {
+    "AF": "Afghanistan",
+    "ZA": "South Africa",
+    "DZ": "Algeria",
+    "AR": "Argentina",
+    "AU": "Australia",
+    "BD": "Bangladesh",
+    "BR": "Brazil",
+    "CA": "Canada",
+    "CL": "Chile",
+    "CN": "China",
+    "CO": "Colombia",
+    "EG": "Egypt",
+    "ET": "Ethiopia",
+    "GH": "Ghana",
+    "IN": "India",
+    "ID": "Indonesia",
+    "IR": "Iran",
+    "IQ": "Iraq",
+    "IL": "Israel",
+    "JP": "Japan",
+    "JO": "Jordan",
+    "KZ": "Kazakhstan",
+    "KE": "Kenya",
+    "KR": "South Korea",
+    "KW": "Kuwait",
+    "LB": "Lebanon",
+    "LY": "Libya",
+    "MY": "Malaysia",
+    "MX": "Mexico",
+    "MA": "Morocco",
+    "MZ": "Mozambique",
+    "MM": "Myanmar",
+    "NG": "Nigeria",
+    "NO": "Norway",
+    "OM": "Oman",
+    "PK": "Pakistan",
+    "PE": "Peru",
+    "PH": "Philippines",
+    "QA": "Qatar",
+    "RU": "Russia",
+    "SA": "Saudi Arabia",
+    "SG": "Singapore",
+    "CH": "Switzerland",
+    "SY": "Syria",
+    "TW": "Taiwan",
+    "TZ": "Tanzania",
+    "TH": "Thailand",
+    "TN": "Tunisia",
+    "TR": "Turkey",
+    "UA": "Ukraine",
+    "AE": "United Arab Emirates",
+    "UK": "United Kingdom",
+    "US": "United States",
+    "UY": "Uruguay",
+    "UZ": "Uzbekistan",
+    "VN": "Vietnam",
+    "YE": "Yemen"
+  },
+  "third_country_carbon_prices": {
+    "CN": 10.5,
+    "UK": 55.0,
+    "KR": 18.0,
+    "JP": 3.5,
+    "CA": 40.0
+  },
+  "country_electricity_ef": {
+    "CN": 0.55,
+    "IN": 0.7,
+    "US": 0.38,
+    "RU": 0.42,
+    "JP": 0.43,
+    "KR": 0.46,
+    "SA": 0.62,
+    "AE": 0.48,
+    "ZA": 0.9,
+    "TR": 0.45,
+    "BR": 0.1,
+    "UK": 0.22,
+    "NO": 0.015,
+    "CH": 0.02
+  },
+  "eu_ets_price_2026": 85.0
+}
