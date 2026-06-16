@@ -1,0 +1,159 @@
+{
+  "sk_prospects": [
+    {
+      "name": "U.S. Steel Košice, s.r.o.",
+      "ico": "36191822",
+      "sector": "iron_steel",
+      "revenue_eur": 2800000000,
+      "employees": 10000,
+      "notes": "Najväčší výrobca ocele v SK. Dováža železnú rudu, uhlie. Určite v CBAM scope.",
+      "contact_idea": "CFO alebo Head of Customs - import surovín z UA, RU (teraz iné zdroje)"
+    },
+    {
+      "name": "Volkswagen Slovakia, a.s.",
+      "ico": "35803210",
+      "sector": "iron_steel",
+      "revenue_eur": 28000000000,
+      "employees": 12000,
+      "notes": "Najväčší automobilka v SK. Dováža oceľ, hliník z DE, CZ, AT, KR, JP.",
+      "contact_idea": "Head of Customs / Supply Chain. Obrovský objem dovozu."
+    },
+    {
+      "name": "Kia Slovakia, s.r.o.",
+      "ico": "35936477",
+      "sector": "iron_steel",
+      "revenue_eur": 12000000000,
+      "employees": 4000,
+      "notes": "Dováža oceľ z KR (POSCO) a hliník.",
+      "contact_idea": "Head of Customs / Purchasing"
+    },
+    {
+      "name": "Stellantis Slovakia, s.r.o.",
+      "ico": "35918269",
+      "sector": "iron_steel",
+      "revenue_eur": 8000000000,
+      "employees": 3000,
+      "notes": "Dováža oceľ na výrobu automobilov v Trnave.",
+      "contact_idea": "Customs & Trade Compliance"
+    },
+    {
+      "name": "Slovnaft, a.s.",
+      "ico": "00686242",
+      "sector": "iron_steel",
+      "revenue_eur": 4000000000,
+      "employees": 4000,
+      "notes": "Rafinéria, importuje oceľ na údržbu + elektrinu. Už máme profil.",
+      "contact_idea": "Máme demo, vieme osloviť cez CSRD kanál"
+    },
+    {
+      "name": "Duslo, a.s. Šaľa",
+      "ico": "34123210",
+      "sector": "fertilizers",
+      "revenue_eur": 300000000,
+      "employees": 1500,
+      "notes": "Výrobca hnojív. Dováža suroviny na výrobu hnojív = CBAM scope.",
+      "contact_idea": "Head of Compliance / CFO"
+    },
+    {
+      "name": "ZSE Energia, a.s.",
+      "ico": "35823545",
+      "sector": "electricity",
+      "revenue_eur": 1500000000,
+      "employees": 2500,
+      "notes": "Import elektriny z UA, CZ - už máme pilot profil!",
+      "contact_idea": "UŽ MÁME KONTAKT cez CSRD"
+    },
+    {
+      "name": "Ferona, a.s.",
+      "ico": "31361132",
+      "sector": "iron_steel",
+      "revenue_eur": 150000000,
+      "employees": 200,
+      "notes": "Najväčší distribútor ocele v SK. Importuje z CZ, AT, PL.",
+      "contact_idea": "Ideálny prvý zákazník - stredná firma, čistý importér"
+    },
+    {
+      "name": "Metal Trade Com, a.s.",
+      "ico": "35738572",
+      "sector": "iron_steel",
+      "revenue_eur": 100000000,
+      "employees": 100,
+      "notes": "Obchodník s kovmi, import z UA, RU, CN.",
+      "contact_idea": "Malá firma, high margin na tCO2e reporting"
+    },
+    {
+      "name": "Slovalco, a.s.",
+      "ico": "31644612",
+      "sector": "aluminium",
+      "revenue_eur": 200000000,
+      "employees": 400,
+      "notes": "Výrobca hliníka v Žiari nad Hronom. Dováža oxid hlinitý.",
+      "contact_idea": "Head of Environment / Compliance"
+    },
+    {
+      "name": "Považská cementáreň, a.s. Ladce",
+      "ico": "31611721",
+      "sector": "cement",
+      "revenue_eur": 80000000,
+      "employees": 300,
+      "notes": "Výrobca cementu, ale dováža suroviny = CBAM.",
+      "contact_idea": "CEO / CFO"
+    },
+    {
+      "name": "Ofz, a.s. (FERROM)",
+      "ico": "36195789",
+      "sector": "iron_steel",
+      "revenue_eur": 150000000,
+      "employees": 500,
+      "notes": "Ferrozlatinová produkcia v Istebnom. Dováža rudy z UA, ZA, TR.",
+      "contact_idea": "Head of Procurement"
+    },
+    {
+      "name": "Strabag, s.r.o.",
+      "ico": "31357910",
+      "sector": "cement",
+      "revenue_eur": 500000000,
+      "employees": 2000,
+      "notes": "Stavebná firma, dováža cement, oceľ z CZ, AT, PL.",
+      "contact_idea": "Head of Supply Chain / Procurement"
+    },
+    {
+      "name": "Jaguar Land Rover Slovakia, s.r.o.",
+      "ico": "47144725",
+      "sector": "iron_steel",
+      "revenue_eur": 5000000000,
+      "employees": 3000,
+      "notes": "Automobilka v Nitre. Dováža oceľ, hliník z UK, DE, AT.",
+      "contact_idea": "Head of Customs (ideálne - sme z Nitry, lokálna výhoda)"
+    }
+  ],
+  "cz_prospects": [
+    {
+      "name": "Škoda Auto, a.s.",
+      "ico": "00177041",
+      "sector": "iron_steel",
+      "revenue_eur": 22000000000,
+      "employees": 35000,
+      "notes": "Najväčší automobilka v CZ. Obrovský import ocele.",
+      "contact_idea": "Head of Customs & Foreign Trade"
+    },
+    {
+      "name": "Třinecké železárny, a.s.",
+      "ico": "18050646",
+      "sector": "iron_steel",
+      "revenue_eur": 1500000000,
+      "employees": 6000,
+      "notes": "Výrobca ocele. Dováža suroviny (rudu, uhlie).",
+      "contact_idea": "Head of Purchasing"
+    },
+    {
+      "name": "Liberty Ostrava, a.s.",
+      "ico": "45193286",
+      "sector": "iron_steel",
+      "revenue_eur": 2000000000,
+      "employees": 5000,
+      "notes": "Veľký výrobca ocele v Ostrave.",
+      "contact_idea": "Head of Customs / CFO"
+    }
+  ]
+}

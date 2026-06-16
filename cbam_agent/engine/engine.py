@@ -37,23 +37,10 @@ class CBAMEngine:
         self.guardrails = SecurityGuardrails()
     
     def load_import_data(self, filepath: str) -> List[Dict]:
-        """Load import data from CSV or JSON file."""
-        path = Path(filepath)
-        
-        # Security check
-        self.guardrails.validate_path(filepath)
-        
-        if not path.exists():
-            raise FileNotFoundError(f"File not found: {filepath}")
-        
-        suffix = path.suffix.lower()
-        
-        if suffix == '.csv':
-            return self._load_csv(path)
-        elif suffix == '.json':
-            return self._load_json(path)
-        else:
-            raise ValueError(f"Unsupported file format: {suffix}. Use .csv or .json")
+        """Load import data from CSV or JSON file using enhanced ERP parser."""
+        from .erp_importer import ERPImporter
+        importer = ERPImporter()
+        return importer.load(filepath)
     
     def _load_csv(self, path: Path) -> List[Dict]:
         """Load import data from CSV."""

@@ -300,6 +300,14 @@ def list_countries(args):
         print(f"{name:25s} {code:6s} €{price:<12.2f}" if price > 0 else f"{name:25s} {code:6s} {'—':<15s}")
 
 
+def _start_server(host: Optional[str] = None, port: Optional[int] = None):
+    """Start the CBAM Comply API server."""
+    os.environ.setdefault("CBAM_API_HOST", host or "0.0.0.0")
+    os.environ.setdefault("CBAM_API_PORT", str(port or 8080))
+    from .api.server import main as api_main
+    api_main()
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="CBAM Agent — Carbon Border Adjustment Mechanism Quarterly Reporting",
@@ -343,6 +351,12 @@ Examples:
     
     countries_parser = subparsers.add_parser("list-countries", help="List countries with carbon prices")
     countries_parser.set_defaults(func=list_countries)
+    
+    # serve (API server)
+    serve_parser = subparsers.add_parser("serve", help="Start the CBAM Comply API server")
+    serve_parser.add_argument("--host", default=None, help="Host (default: 0.0.0.0)")
+    serve_parser.add_argument("--port", type=int, default=None, help="Port (default: 8080)")
+    serve_parser.set_defaults(func=lambda a: _start_server(a.host, a.port))
     
     args = parser.parse_args()
     
